@@ -1,0 +1,35 @@
+black_GT.mat
+blue_GT.mat
+brown_GT.mat
+category_GT.mat
+# +1 means shirt
+# +2 means t shirt
+# +3 means sweater
+# +4 means tank top
+# +5 means hoodies
+# +6 means other category
+collar_GT.mat
+cyan_GT.mat
+gender_GT.mat
+gray_GT.mat
+green_GT.mat
+many_colors_GT.mat
+neckline_GT.mat
+# +1 for round
+# +2 for v shape
+# +3 for other
+necktie_GT.mat
+pattern_floral_GT.mat
+pattern_graphics_GT.mat
+pattern_plaid_GT.mat
+pattern_solid_GT.mat
+pattern_spot_GT.mat
+pattern_stripe_GT.mat
+placket_GT.mat
+purple_GT.mat
+red_GT.mat
+scarf_GT.mat
+skin_exposure_GT.mat
+sleevelength_GT.mat
+white_GT.mat
+yellow_GT.mat

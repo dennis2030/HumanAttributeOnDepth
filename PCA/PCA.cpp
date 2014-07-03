@@ -1,0 +1,105 @@
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+
+using namespace cv;
+using namespace std;
+
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+
+
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, elems);
+    return elems;
+}
+
+int getDim(const char* filename)
+{
+    ifstream f;
+    vector<string> tmpV;
+
+    f.open(filename);
+    int dim = 0;
+    string tmpS;
+    std::getline(f, tmpS);
+    f.close();
+    tmpV = split(tmpS, ' ');
+    dim = tmpV.size();
+
+    return dim;
+}
+
+
+int linenumber(const char* filename){
+    ifstream data_file;
+    data_file.open(filename);
+    char c;
+    int linenum = 0;
+    string tmpS;
+    //count lines
+    while(std::getline(data_file,tmpS)){
+        linenum++;
+    }
+    data_file.close();
+    return linenum;
+}
+int main(int argc, const char *argv[]) 
+{
+    string filename = "../450/head.hog";
+    std::ifstream file(filename.c_str(), ifstream::in);
+    int line_num = 0;
+    line_num = linenumber(filename.c_str());
+    cout << linenumber(filename.c_str()) << endl;
+    int dim = 0;
+
+    dim = getDim(filename.c_str());
+
+    cv::Mat data(line_num,dim,CV_32F);
+    std::string line;
+    for(int i=0;i<line_num;i++)
+    {
+        std::getline(file, line);
+        vector<string> tmpV;
+        tmpV = split(line,' ');
+        for(int j=1;j<tmpV.size();j++)
+        {
+            data.at<float>(i,j-1) = (float)atof(tmpV[j].c_str());
+        }
+    }
+
+    PCA pca(data, Mat(), CV_PCA_DATA_AS_ROW);
+
+    Mat eigenval, eigenvec, mean;
+    mean = pca.mean.clone();
+    eigenval = pca.eigenvalues.clone();
+    eigenvec = pca.eigenvectors.clone();
+    FileStorage fs1("mean_Matrix_resize", FileStorage::WRITE);
+    fs1 << "mean_Matrix" << mean;
+    fs1.release();
+    FileStorage fs2("eigenval_Matrix_resize", FileStorage::WRITE);
+    fs2 << "eigenval_Matrix" << eigenval;
+    fs2.release();
+    FileStorage fs3("eigenvec_Matrix_resize" , FileStorage::WRITE);
+    fs3 << "eigenvec_Matrix" << eigenvec;
+    fs3.release();	
+
+
+    cv::FileStorage out_f("result_mat.xml", cv::FileStorage::WRITE);
+    out_f << "data"<< data;
+    out_f.release();
+
+    return 0;
+}

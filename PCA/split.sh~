@@ -1,0 +1,20 @@
+./splitTo5Fold.py bag.svm
+./splitTo5Fold.py glass.svm
+./splitTo5Fold.py handHold.svm
+./splitTo5Fold.py hoodies.svm
+./splitTo5Fold.py longHair.svm
+./splitTo5Fold.py longSleeve.svm
+./splitTo5Fold.py noSleeve.svm
+./splitTo5Fold.py otherC.svm
+othersCate.svm
+outerwear.svm
+prefix.svm
+roundShape.svm
+shirt.svm
+shortHair.svm
+shortSleeve.svm
+sweater.svm
+tShirt.svm
+tankTop.svm
+vShape.svm
+valid.svm

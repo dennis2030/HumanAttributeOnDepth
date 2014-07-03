@@ -1,0 +1,125 @@
+#!/usr/bin/env python
+
+def __main__():
+    gt_f = open('450_tagged.txt','r')
+    fname_f = open('correspond_fname.txt','r')
+
+    nameList = ['prefix', 'valid', 'roundShape', 'vShape', 'otherC', 'shirt', 'sweater', 'tShirt', 'tankTop', 'outerwear', 'hoodies', 'othersCate', 'shortSleeve', 'longSleeve', 'noSleeve', 'longHair', 'handHold', 'glass', 'bag', 'shortHair']
+#    att_list = ['black_GT','blue_GT','brown_GT','cyan_GT','gender_GT','gray_GT','green_GT', 'many_colors_GT', 'neckline_GT', 'pattern_floral_GT','pattern_graphics_GT','pattern_plaid_GT','pattern_solid_GT','pattern_spot_GT','placket_GT','purple_GT','red_GT', 'scarf_GT', 'skin_exposure_GT','white_GT','yellow_GT']
+
+    attIndex_list = [9,16,17,18]
+
+    gt_lines = gt_f.readlines()
+    fname_lines = fname_f.readlines()
+
+    fname_dict = {}
+
+    # construct corresponds fname dict
+    for line in fname_lines:
+        tmp_list = line.split('\t')
+        origin_fname = tmp_list[0].strip()
+        mapped_fname = tmp_list[1].strip()
+        fname_dict[origin_fname] = mapped_fname
+
+    # generate ground truth of unused attributes
+    # format: first line: att name, remaining lines are labels for each records
+    '''
+    for att in att_list:
+        f = open(att+'.txt','w')
+        for i in range(0,len(gt_lines)):
+            f.write('0\n')
+        f.close()
+    '''
+    
+    # for neckline && collar
+    f = open('neckline_GT.txt','w')
+    f_collar = open('collar_GT.txt','w')
+    for line in gt_lines:
+        tmp_list = line.split(',')
+        roundShape = int(tmp_list[2])
+        vShape = int(tmp_list[3])
+        other = int(tmp_list[4])
+        result = 0;
+        collar = 1;
+        if roundShape == 1:
+            result = 1
+        elif vShape == 1:
+            result = 2
+            collar = 2
+        else:
+            result = 'NaN'
+            collar = 2
+        f.write(str(result) + '\n')
+        f_collar.write(str(collar) + '\n')
+    f.close()
+    f_collar.close()
+
+    # for category
+    f = open('category_GT.txt','w')
+    for line in gt_lines:
+        tmp_list = line.split(',')
+        shirt = int(tmp_list[5])
+        sweater = int(tmp_list[6])
+        tShirt = int(tmp_list[7])
+        tankTop = int(tmp_list[8])
+        hoodies = int(tmp_list[10])
+        otherCate = int(tmp_list[11])
+        category = 0
+        if shirt == 1:
+            category = 1
+        elif tShirt == 1:
+            category = 2
+        elif sweater == 1:
+            category = 'NaN'
+        elif tankTop == 1:
+            category = 'NaN'
+        elif hoodies == 1:
+            category = 5
+        else:
+            category = 'NaN'
+        f.write(str(category) + '\n')
+
+    f.close()
+    
+    # for sleeve length
+    f = open('sleevelength_GT.txt','w')
+    for line in gt_lines:
+        tmp_list = line.strip().split(',')
+        shortSleeve = int(tmp_list[12])
+        longSleeve = int(tmp_list[13])
+        noSleeve = int(tmp_list[14])
+        sleeve = 0
+        if shortSleeve == 1:
+            sleeve = 1
+        elif longSleeve == 1:
+            sleeve = 2
+        else:
+            sleeve = 3
+        f.write(str(sleeve) + '\n')
+    f.close()
+
+    # for hair length
+    f = open('hairlength_GT.txt','w')
+    for line in gt_lines:
+        tmp_list = line.strip().split(',')
+        longHair = int(tmp_list[15])
+        shortHair = int(tmp_list[19])
+        hairLength = 1
+        if longHair == 1:
+            hairLength = 2
+        f.write( str(hairLength) +'\n')
+    f.close()
+
+    # for rest of attributes
+    for idx in attIndex_list:
+        f = open(nameList[idx]+'_GT.txt','w')
+        for line in gt_lines:
+            tmp_list = line.strip().split(',')
+            att = 1
+            if tmp_list[idx] == '1':
+                att = 2
+            f.write(str(att)+'\n')
+        f.close()
+        
+if __name__ == '__main__':
+    __main__()

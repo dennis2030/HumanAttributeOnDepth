@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+import sys
+import random
+import collections
+
+def __main__():
+    fname = sys.argv[1]
+    f = open(fname,'r')
+    random_f = open('randomSet.txt','r')
+    lines = f.readlines()
+    random_lines = random_f.readlines()
+    lineNum = len(lines)
+    randomSet = set()
+    for line in random_lines:
+        randomSet.add(int(line.strip()))
+    prefix = fname.split('.')[0]
+    f_train = open(prefix+'.train','w')
+    f_test = open(prefix+'.test','w')
+
+    for i in range(0,lineNum):
+        if i in randomSet:
+            f_test.write(lines[i])
+        else:
+            f_train.write(lines[i])
+        
+
+if __name__ == '__main__':
+    __main__()

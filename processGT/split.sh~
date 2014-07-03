@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for f in $(find GT/ -name '*.txt');do
+    ./splitTo5Fold.py ${f}
+done
+
